@@ -5,13 +5,14 @@ const registeruser = async (req,res) =>{
  const {name, email, password, image } = req.body;
 
  if (!name || !email || !password) {
-  res.status(400).send("Please Enter all the Feilds");
+  res.status(400).send({message : "Please Enter all the Feilds"});
 }
 const userExists = await User.findOne({ email });
 
 if (userExists) {
-  res.status(400).send("User already exists");
+  res.status(400).send({msg : "User already exists"});
 }
+else{
 const user = await User.create({
   name,
   email,
@@ -20,7 +21,8 @@ const user = await User.create({
 });
 
 if (user) {
-  res.status(201).json({
+  res.status(201).send({
+    msg : "User Created Sucessfully",
     _id: user._id,
     name: user.name,
     email: user.email,
@@ -29,28 +31,23 @@ if (user) {
     token: generateToken(user._id),
   });
 } else {
-  res.status(400).send("User not found");
+  res.status(400).send({msg : "User not found"});
 }
 
-  
+}
 }
 const authuser = async(req,res) =>{
   const {email, password} = req.body;
-  
 const user = await User.findOne({email});
-
 if (user && user.password === password) {
-  res.json({
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    isAdmin: user.isAdmin,
-    pic: user.pic,
+  res.send({
+    msg : "User Login Sucessfully",
     token: generateToken(user._id),
+     user: user,
   });
 } 
 else {
-  res.status(401).send("Invalid Email or Password");
+  res.status(401).send({message : "Invalid Email or Password"});
 }
 }
 
