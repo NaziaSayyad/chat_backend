@@ -1,7 +1,9 @@
-    const generateToken = require("../config/generatetoken");
-    const User = require("../models/userModel");
+    
+    
+  const generateToken = require("../config/generatetoken");
+  const User = require("../models/userModel");
 
-    const registeruser = async (req,res) =>{
+  const registeruser = async (req,res) =>{
     const {name, email, password, image } = req.body;
 
     if (!name || !email || !password) {
@@ -35,8 +37,9 @@
     }
 
     }
-    }
-    const authuser = async(req,res) =>{
+  }
+
+  const authuser = async(req,res) =>{
       const {email, password} = req.body;
     const user = await User.findOne({email});
     if (user && user.password === password) {
@@ -49,9 +52,9 @@
     else {
       res.status(401).send({message : "Invalid Email or Password"});
     }
-    }
+  }
 
-    const alluser = async (req,res) => {
+const alluser = async (req,res) => {
       const keyword = req.query.search
         ? {
             $or: [
@@ -63,5 +66,5 @@
 
       const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
       res.send(users);
-    }
-    module.exports = { registeruser, authuser, alluser };
+}
+module.exports = { registeruser, authuser, alluser };
