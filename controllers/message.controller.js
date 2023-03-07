@@ -10,7 +10,7 @@ const allMessages = async (req, res) => {
     res.json(messages);
   } catch (error) {
     res.status(400);
-    throw new Error(error.message);
+    res.send(error);
   }
 }
 const sendMessage = async (req, res) => {
